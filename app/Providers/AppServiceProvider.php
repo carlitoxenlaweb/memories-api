@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -27,8 +28,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         JsonResource::withoutWrapping();
-        if (env('APP_ENV') !== 'local') {
-            $url->forceSchema('https');
-        }
+		if(env('APP_ENV') == 'production') {
+			$url->forceScheme('https');
+		}
     }
 }
