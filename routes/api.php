@@ -20,6 +20,9 @@ Route::get('categories', [ApiController::class, 'getCategories']);
 Route::get('categories/{id}', [ApiController::class, 'getCategory']);
 Route::get('categories/{id}/products', [ApiController::class, 'getCategoryProducts']);
 
+Route::get('finishes', [ApiController::class, 'getFinishes']);
+Route::get('finishes/{id}', [ApiController::class, 'getFinish']);
+
 Route::get('products', [ApiController::class, 'getProducts']);
 Route::get('products/{id}', [ApiController::class, 'getProduct']);
 

@@ -27,7 +27,7 @@ class ProductsController extends Controller
 
         $product->title = $request->input('title');
         $product->description = $request->input('description');
-        $product->specs = $request->input('specs');
+        $product->specs = $request->input('specs') ?? '';
         $product->size = $request->input('size');
         $product->paper = $request->input('paper');
         $product->category_id = $request->input('category');
@@ -79,7 +79,7 @@ class ProductsController extends Controller
 
         $product->title = $request->input('title');
         $product->description = $request->input('description');
-        $product->specs = $request->input('specs');
+        $product->specs = $request->input('specs') ?? '';
         $product->size = $request->input('size');
         $product->paper = $request->input('paper');
         $product->category_id = $request->input('category');

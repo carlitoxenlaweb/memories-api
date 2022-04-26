@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="label">{{ __('Características') }}</label>
-                                    <textarea required autocomplete="off" name="specs" class="form-control" type="text" placeholder="{{ __('Listado separado por punto y coma (;)') }}"></textarea>
+                                    <textarea autocomplete="off" name="specs" class="form-control" type="text" placeholder="{{ __('Listado separado por punto y coma (;)') }}"></textarea>
                                 </div>
                             </div>
                         </div>
