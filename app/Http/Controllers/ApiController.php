@@ -66,6 +66,28 @@ class ApiController extends Controller
         return response()->json($category);
     }
 
+    public function getCategoryProducts ($id)
+    {
+        $products = Product::with(['category', 'prices', 'finishes'])->where('category_id', $id)->get();
+
+        foreach ($products as $product) {
+            $this->unset($product);
+            $this->unset($product->category);
+            
+            $product->specs = explode(";", $product->specs);
+            foreach ($product->prices as $price) {
+                $this->unset($price);
+            }
+
+            for ($i=0; $i < count($product->finishes); $i++) {
+                $product->finishes[$i] = Finish::find($product->finishes[$i]->finish_id);
+                $this->unset($product->finishes[$i]);
+            }
+        }
+
+        return response()->json($products);
+    }
+
     public function getProducts ()
     {
         $products = Product::with(['category', 'prices', 'finishes'])->get();
