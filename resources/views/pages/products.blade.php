@@ -117,8 +117,8 @@
                             </div>
                             <div class="col">
                                 <div class="form-group mt-2">
-                                    <label class="label">{{ __('Náximo') }}</label>
-                                    <input required autocomplete="off" name="prices[0][max]" min="0" class="form-control" type="number" placeholder="{{ __('Náximo') }}">
+                                    <label class="label">{{ __('Máximo') }}</label>
+                                    <input required autocomplete="off" name="prices[0][max]" min="0" class="form-control" type="number" placeholder="{{ __('Máximo') }}">
                                 </div>
                             </div>
                             <div class="col">
@@ -235,8 +235,8 @@
                             </div>
                             <div class="col">
                                 <div class="form-group mt-2">
-                                    <label class="label">{{ __('Náximo') }}</label>
-                                    <input id="update-form-max" required autocomplete="off" name="prices[0][max]" min="0" class="form-control" type="number" placeholder="{{ __('Náximo') }}">
+                                    <label class="label">{{ __('Máximo') }}</label>
+                                    <input id="update-form-max" required autocomplete="off" name="prices[0][max]" min="0" class="form-control" type="number" placeholder="{{ __('Máximo') }}">
                                 </div>
                             </div>
                             <div class="col">

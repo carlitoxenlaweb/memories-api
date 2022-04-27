@@ -83,6 +83,15 @@ class ApiController extends Controller
                 $product->finishes[$i] = Finish::find($product->finishes[$i]->finish_id);
                 $this->unset($product->finishes[$i]);
             }
+            
+            $images = ProductImage::where('product_id', $product->id)->get();
+            foreach ($images as $image) {
+                $this->unset($image);
+                unset($image->id);
+                unset($image->product_id);
+            }
+
+            $product->images = $images;
         }
 
         return response()->json($products);

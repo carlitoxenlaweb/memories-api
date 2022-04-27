@@ -26,7 +26,7 @@ class CategoriesController extends Controller
 
         if ($request->file('image')) {
             $imagePath = $request->file('image');
-            $imageName = $imagePath->getClientOriginalName();
+            $imageName = $this->hashFile($imagePath->getClientOriginalName());
             $path = $imagePath->storeAs('uploads', $imageName, 'public');
             $category->image_path = '/storage/'.$path;
         } else {
@@ -48,7 +48,7 @@ class CategoriesController extends Controller
 
         if ($request->file('image')) {
             $imagePath = $request->file('image');
-            $imageName = $imagePath->getClientOriginalName();
+            $imageName = $this->hashFile($imagePath->getClientOriginalName());
             $path = $imagePath->storeAs('uploads', $imageName, 'public');
             $category->image_path = '/storage/'.$path;
         }
