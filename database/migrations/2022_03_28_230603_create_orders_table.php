@@ -24,6 +24,7 @@ class CreateOrdersTable extends Migration
             $table->integer('total_photos');
             $table->enum('status', ['received', 'progress', 'delivered'])->default('received');
             $table->boolean('paid')->default(false);
+            $table->text('extras')->default("");
             $table->foreignId('client_id')->constrained();
             $table->string('stripe_reference');
             $table->foreignId('client_card_id')->constrained();

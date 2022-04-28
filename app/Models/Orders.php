@@ -20,6 +20,7 @@ class Orders extends Model
         'total_photos',
         'status',
         'paid',
+        'extras',
         'client_id',
         'stripe_reference',
         'client_card_id'

@@ -31,6 +31,7 @@ class ProductsController extends Controller
         $product->size = $request->input('size');
         $product->paper = $request->input('paper');
         $product->category_id = $request->input('category');
+        $product->quantity = $request->has('quantity');
         
         $product->save();
 
@@ -83,6 +84,7 @@ class ProductsController extends Controller
         $product->size = $request->input('size');
         $product->paper = $request->input('paper');
         $product->category_id = $request->input('category');
+        $product->quantity = $request->has('quantity');
         
         $product->save();
 

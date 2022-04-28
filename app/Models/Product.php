@@ -16,7 +16,8 @@ class Product extends Model
         'specs',
         'size',
         'paper',
-        'category_id'
+        'category_id',
+        'quantity'
     ];
     
     public function category()

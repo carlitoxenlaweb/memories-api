@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->text('specs');
             $table->string('size');
             $table->string('paper');
+            $table->boolean('quantity')->default(false);
             $table->foreignId('category_id')->constrained();
             $table->softDeletes();
             $table->timestamps();

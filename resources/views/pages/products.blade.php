@@ -155,6 +155,14 @@
                                     <input type="file" name="images[]" multiple>
                                 </div>
                             </div>
+                            <div class="col">
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="create-input-quantity" name="quantity">
+                                    <label class="form-check-label" for="create-input-quantity">
+                                        ¿Utiliza cantidades?
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -258,8 +266,8 @@
                                 <label>Acabados</label>
                                 @foreach ($finishes as $finish)
                                     <div class="form-check mt-2">
-                                        <input id="update-form-finish-{{ $finish->id }}" class="form-check-input" type="checkbox" value="{{ $finish->id }}" id="create-input-finish-{{ $loop->index }}" name="finishes[]">
-                                        <label class="form-check-label" for="create-input-finish-{{ $loop->index }}">
+                                        <input id="update-form-finish-{{ $finish->id }}" class="form-check-input" type="checkbox" value="{{ $finish->id }}" id="update-input-finish-{{ $loop->index }}" name="finishes[]">
+                                        <label class="form-check-label" for="update-input-finish-{{ $loop->index }}">
                                             {{ $finish->name }}
                                         </label>
                                     </div>
@@ -271,6 +279,14 @@
                                 <div class="form-group mt-2">
                                     <label class="label">{{ __('Imagenes') }}</label>
                                     <input type="file" name="images[]" multiple>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="update-form-quantity" name="quantity">
+                                    <label class="form-check-label" for="update-form-quantity">
+                                        ¿Utiliza cantidades?
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -374,6 +390,7 @@
             const updateModalInputMin = document.getElementById('update-form-min');
             const updateModalInputMax = document.getElementById('update-form-max');
             const updateModalInputPriority = document.getElementById('update-form-priority');
+            const updateModalInputQuantity = document.getElementById('update-form-quantity');
 
             const deleteModalInputId = document.getElementById('delete-form-id');
 
@@ -381,9 +398,7 @@
                 count = 0;
                 createForm.reset();
                 updateForm.reset();
-                $('#extra-prices').find('>div').each(function () {
-                    $(this).remove();
-                });
+                $('#extra-prices, #extra-prices-update').html('');
             };
 
             createModal.addEventListener('hide.bs.modal', resetModal);
@@ -403,6 +418,7 @@
                 updateModalInputMin.value = data.prices[0].min;
                 updateModalInputMax.value = data.prices[0].max;
                 updateModalInputPriority.value = data.prices[0].priority;
+                updateModalInputQuantity.checked = !!data.quantity;
                 
                 for (const item of data.finishes) {
                     const checkItem = document.getElementById('update-form-finish-' + item.finish_id);
