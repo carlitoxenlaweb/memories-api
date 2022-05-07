@@ -36,6 +36,16 @@
                             <td>{{ $product->paper }}</td>
                             <td>{{ $product->category->title }}</td>
                             <td class="text-end">
+                                @if ($product->promotion == '')
+                                <a data-element="{{ $loop->index }}" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#promo-create-modal" href="#!">
+                                    {{ __('Crear Promo') }}
+                                </a>
+                                @else
+                                <a data-element="{{ $loop->index }}" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#promo-delete-modal" href="#!">
+                                    {{ __('Quitar Promo') }}
+                                </a>
+                                @endif
+                                &nbsp;
                                 <a data-element="{{ $loop->index }}" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#update-modal" href="#!">
                                     {{ __('Editar') }}
                                 </a>&nbsp;
@@ -57,7 +67,7 @@
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">{{ __('Crear Producto') }}</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -166,7 +176,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
                         <button type="submit" class="btn btn-success">{{ __('Crear Producto') }}</button>
                     </div>
                 </form>
@@ -183,7 +193,7 @@
                     <input type="hidden" name="id" value="" id="update-form-id">
                     <div class="modal-header bg-info text-white">
                         <h4 class="modal-title">{{ __('Actualizar Producto') }}</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -228,7 +238,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-4 mb-2">
+                        <div class="row mt-4 mb-2" id="extra-prices-update-promotion-exists">
+                            <p class="text-danger">Este producto actualmente cuenta con una promoción, por lo que no puedes editar su valor sin eliminar la promo activa</p>
+                        </div>
+                        <div class="row mt-4 mb-2" id="extra-prices-update-promotion-not-exists">
                             <div class="col">
                                 <div class="form-group mt-2">
                                     <label class="label">{{ __('Precio') }}</label>
@@ -292,7 +305,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
                         <button type="submit" class="btn btn-info text-white">{{ __('Actualizar Producto') }}</button>
                     </div>
                 </form>
@@ -309,7 +322,7 @@
                     <input type="hidden" name="id" value="" id="delete-form-id">
                     <div class="modal-header bg-danger text-white">
                         <h4 class="modal-title">{{ __('Eliminar Producto') }}</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -317,8 +330,64 @@
                         <h4>{{ __('¿Seguro que quieres eliminar el item seleccionado?') }}</h4>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
                         <button type="submit" class="btn btn-danger">{{ __('Eliminar Producto') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="promo-create-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('products.create.promo') }}" method="POST" id="promo-create-form">
+                    @csrf
+                    <input type="hidden" name="id" value="" id="promo-create-form-id">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ __('Crear Promoción') }}</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group mt-2">
+                                    <label class="label">{{ __('Precio') }}</label>
+                                    <input required autocomplete="off" name="price" min="0" step=".01" class="form-control" type="number" placeholder="{{ __('Precio') }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
+                        <button type="submit" class="btn btn-success">{{ __('Promocionar') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="promo-delete-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('products.delete.promo') }}" method="POST" id="promo-delete-form">
+                    @csrf
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="id" value="" id="promo-delete-form-id">
+                    <div class="modal-header bg-danger text-white">
+                        <h4 class="modal-title">{{ __('Eliminar Promoción') }}</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <h4>{{ __('¿Seguro que quieres quitar la promoción de este producto?') }}</h4>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
+                        <button type="submit" class="btn btn-danger">{{ __('Eliminar') }}</button>
                     </div>
                 </form>
             </div>
@@ -379,6 +448,9 @@
             const createForm = document.getElementById('create-form');
             const updateForm = document.getElementById('update-form');
 
+            const createPromoModal = document.getElementById('promo-create-modal');
+            const deletePromoModal = document.getElementById('promo-delete-modal');
+
             const updateModalInputId = document.getElementById('update-form-id');
             const updateModalInputTitle = document.getElementById('update-form-title');
             const updateModalInputDescription = document.getElementById('update-form-description');
@@ -392,7 +464,10 @@
             const updateModalInputPriority = document.getElementById('update-form-priority');
             const updateModalInputQuantity = document.getElementById('update-form-quantity');
 
+            const createPromoModalInputId = document.getElementById('promo-create-form-id');
+
             const deleteModalInputId = document.getElementById('delete-form-id');
+            const deletePromoModalInputId = document.getElementById('promo-delete-form-id');
 
             const resetModal = function (event) {
                 count = 0;
@@ -425,27 +500,43 @@
                     if (!!checkItem) checkItem.checked = true;
                 }
 
-                for (let i = 1; i < data.prices.length; i++) {
-                    const item = data.prices[i];
-                    count++;
-                    $base = $('#extra-prices-base').clone();
-                    $base.attr('id', $base.attr('id') + '-update-' + count);
-                    $inputs = $base.find('input');
-                    $($inputs[0]).attr('name', 'prices[' + count + '][price]').val(item.price);
-                    $($inputs[1]).attr('name', 'prices[' + count + '][min]').val(item.min);
-                    $($inputs[2]).attr('name', 'prices[' + count + '][max]').val(item.max);
-                    $($inputs[3]).attr('name', 'prices[' + count + '][priority]').val(item.priority);
-                    $base.find('button')
-                        .attr('id', 'btn-remove-price-update-' + count)
-                        .removeClass('btn-success')
-                        .addClass('btn-danger btn-remove-price')
-                        .text('{{ __('Eliminar') }}');
-                    $('#extra-prices-update').append($base);
+                if (data.promotion_id) {
+                    $("#extra-prices-update-promotion-exists").show();
+                    $("#extra-prices-update-promotion-not-exists").hide();
+                } else {
+                    $("#extra-prices-update-promotion-exists").hide();
+                    $("#extra-prices-update-promotion-not-exists").show();
+                    for (let i = 1; i < data.prices.length; i++) {
+                        const item = data.prices[i];
+                        count++;
+                        $base = $('#extra-prices-base').clone();
+                        $base.attr('id', $base.attr('id') + '-update-' + count);
+                        $inputs = $base.find('input');
+                        $($inputs[0]).attr('name', 'prices[' + count + '][price]').val(item.price);
+                        $($inputs[1]).attr('name', 'prices[' + count + '][min]').val(item.min);
+                        $($inputs[2]).attr('name', 'prices[' + count + '][max]').val(item.max);
+                        $($inputs[3]).attr('name', 'prices[' + count + '][priority]').val(item.priority);
+                        $base.find('button')
+                            .attr('id', 'btn-remove-price-update-' + count)
+                            .removeClass('btn-success')
+                            .addClass('btn-danger btn-remove-price')
+                            .text('{{ __('Eliminar') }}');
+                        $('#extra-prices-update').append($base);
+                    }
                 }
             });
 
             deleteModal.addEventListener('show.bs.modal', function (event) {
                 deleteModalInputId.value = elements[event.relatedTarget.dataset.element].id;
+            });
+
+            createPromoModal.addEventListener('show.bs.modal', function (event) {
+                const data = elements[event.relatedTarget.dataset.element];
+                createPromoModalInputId.value = data.id;
+            });
+
+            deletePromoModal.addEventListener('show.bs.modal', function (event) {
+                deletePromoModalInputId.value = elements[event.relatedTarget.dataset.element].id;
             });
         </script>
     </x-slot>

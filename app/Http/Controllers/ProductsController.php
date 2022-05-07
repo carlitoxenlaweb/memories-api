@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\ProductFinish;
 use App\Models\ProductImage;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -137,6 +138,33 @@ class ProductsController extends Controller
     {
         $product = Product::find($request->input('id'));
         $product->delete();
+        return redirect()->route('products.index');
+    }
+    
+    public function create_promo(Request $request)
+    {
+        $product = Product::find($request->input('id'));
+        $promotion = new Promotion();
+
+        $promotion->product_id = $product->id;
+        $promotion->price = $request->input('price');
+
+        $promotion->save();
+
+        $product->promotion_id = $promotion->id;
+        $product->save();
+
+        return redirect()->route('products.index');
+    }
+    
+    public function delete_promo(Request $request)
+    {
+        $product = Product::find($request->input('id'));
+        Promotion::find($product->promotion_id)->delete();
+        
+        $product->promotion_id = null;
+        $product->save();
+
         return redirect()->route('products.index');
     }
 }

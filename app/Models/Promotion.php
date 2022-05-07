@@ -6,22 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ClientAddress extends Model
+class Promotion extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'client_id',
-        'type',
-        'address',
-        'country',
-        'city',
-        'zip',
-        'mobile'
+        'price',
+        'product_id',
     ];
 
-    public function client()
+    protected $casts = [
+        'price' => 'float',
+    ];
+
+    public function product()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Product::class);
     }
 }

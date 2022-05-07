@@ -29,10 +29,12 @@ Route::get('products/{id}', [ApiController::class, 'getProduct']);
 Route::get('address', [ApiController::class, 'getAddresses']);
 Route::get('address/{id}', [ApiController::class, 'getAddress']);
 Route::post('address', [ApiController::class, 'newAddress']);
+Route::delete('address/{id}', [ApiController::class, 'removeAddress']);
 
 Route::get('cards', [ApiController::class, 'getCards']);
 Route::get('cards/{id}', [ApiController::class, 'getCard']);
 Route::post('cards', [ApiController::class, 'newCard']);
+Route::delete('cards/{id}', [ApiController::class, 'removeCard']);
 
 Route::get('orders', [ApiController::class, 'getOrders']);
 Route::get('orders/{id}', [ApiController::class, 'getOrder']);

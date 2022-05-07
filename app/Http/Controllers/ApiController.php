@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\ProductFinish;
 use App\Models\ProductImage;
+use App\Models\Promotion;
 use App\Models\Client;
 use App\Models\ClientAddress;
 use App\Models\ClientCards;
@@ -18,9 +19,19 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    public function getCategories ()
+    public function getCategories (Request $request)
     {
-        $categories = Category::whereNull('parent_id')->get();
+        $categories = null;
+
+        switch ($request->input('filter')) {
+            case 'giftcard':
+                $categories = Category::whereRaw('LOWER(title) like (?)', ["%de regalo%"])->whereNull('parent_id')->get();
+                break;
+            
+            default:
+                $categories = Category::whereRaw('LOWER(title) not like (?)', ["%de regalo%"])->whereNull('parent_id')->get();
+                break;
+        }
 
         foreach ($categories as $category) {
             $this->unset($category);
@@ -113,9 +124,22 @@ class ApiController extends Controller
         return response()->json($finish);
     }
 
-    public function getProducts ()
+    public function getProducts (Request $request)
     {
-        $products = Product::with(['category', 'prices', 'finishes'])->get();
+        $products = null;
+
+        switch ($request->input('filter')) {
+            case 'giftcard':
+                $category = Category::whereRaw('LOWER(title) like (?)', ["%de regalo%"])->whereNull('parent_id')->first();
+                $products = Product::with(['category', 'prices', 'finishes'])->where('category_id', $category->id)->get();
+                break;
+            case 'promotion':
+                $products = Product::with(['category', 'prices', 'finishes', 'promotion'])->whereNotNull('promotion_id')->get();
+                break;
+            default:
+                $products = Product::with(['category', 'prices', 'finishes'])->whereNull('promotion_id')->get();
+                break;
+        }
 
         foreach ($products as $product) {
             $this->unset($product);
@@ -139,6 +163,17 @@ class ApiController extends Controller
             }
 
             $product->images = $images;
+
+            if (!is_null($product->promotion)) {
+                $product->promotion_price = [
+                    'old' => $product->prices[0]->price,
+                    'new' => $product->promotion->price,
+                ];
+                unset($product->prices);
+                unset($product->promotion);
+            } else {
+                unset($product->promotion_id);
+            }
         }
 
         return response()->json($products);
@@ -205,14 +240,15 @@ class ApiController extends Controller
         $client = Client::where('email', $request->input('UserEmail'))->first();
         if ($client === null) {
             $client = new Client();
-            $client->name = $request->input('UserEmail');
-            $client->email = $request->input('UserName');
+            $client->name = $request->input('UserName');
+            $client->email = $request->input('UserEmail');
             $client->save();
         }
 
         $address = new ClientAddress();
         
         $address->client_id = $client->id;
+        $address->type = $request->input('type');
         $address->address = $request->input('Address');
         $address->country = $request->input('Country');
         $address->city = $request->input('City');
@@ -220,6 +256,17 @@ class ApiController extends Controller
         $address->mobile = $request->input('Mobile');
         
         $address->save();
+        return response()->json($address);
+    }
+
+    public function removeAddress ($id, Request $request)
+    {
+        $client = Client::where('email', $request->input('UserEmail'))->first();
+        if ($client === null) {
+            return response()->json([]);
+        }
+
+        $address = ClientAddress::where('id', $id)->where('client_id', $client->id)->delete();
         return response()->json($address);
     }
 
@@ -256,8 +303,8 @@ class ApiController extends Controller
         $client = Client::where('email', $request->input('UserEmail'))->first();
         if ($client === null) {
             $client = new Client();
-            $client->name = $request->input('UserEmail');
-            $client->email = $request->input('UserName');
+            $client->name = $request->input('UserName');
+            $client->email = $request->input('UserEmail');
             $client->save();
         }
 
@@ -269,6 +316,17 @@ class ApiController extends Controller
         $card->cvv = $request->input('CVV');
         
         $card->save();
+        return response()->json($card);
+    }
+
+    public function removeCard ($id, Request $request)
+    {
+        $client = Client::where('email', $request->input('UserEmail'))->first();
+        if ($client === null) {
+            return response()->json([]);
+        }
+
+        $card = ClientCards::where('id', $id)->where('client_id', $client->id)->delete();
         return response()->json($card);
     }
 

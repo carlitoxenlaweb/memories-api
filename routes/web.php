@@ -7,6 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\FinishesController;
+use App\Http\Controllers\OrdersController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,6 +41,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [ProductsController::class, 'create'])->name('create');
         Route::put('/', [ProductsController::class, 'update'])->name('update');
         Route::delete('/', [ProductsController::class, 'delete'])->name('delete');
+        
+        Route::post('/promo', [ProductsController::class, 'create_promo'])->name('create.promo');
+        Route::delete('/promo', [ProductsController::class, 'delete_promo'])->name('delete.promo');
     });
 
     Route::name('finishes.')->prefix('finishes')->group(function () {
@@ -47,6 +51,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [FinishesController::class, 'create'])->name('create');
         Route::put('/', [FinishesController::class, 'update'])->name('update');
         Route::delete('/', [FinishesController::class, 'delete'])->name('delete');
+    });
+
+    Route::name('orders.')->prefix('orders')->group(function () {
+        Route::get('/', [OrdersController::class, 'view'])->name('index');
+        Route::patch('/', [OrdersController::class, 'patch'])->name('patch');
+        Route::get('/{id}', [OrdersController::class, 'details'])->name('details');
     });
 
 });

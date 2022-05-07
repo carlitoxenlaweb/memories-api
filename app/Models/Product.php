@@ -17,7 +17,8 @@ class Product extends Model
         'size',
         'paper',
         'category_id',
-        'quantity'
+        'quantity',
+        'promotion'
     ];
     
     public function category()
@@ -43,5 +44,10 @@ class Product extends Model
     public function order()
     {
         return $this->hasMany(Orders::class);
+    }
+    
+    public function promotion()
+    {
+        return $this->hasOne(Promotion::class);
     }
 }

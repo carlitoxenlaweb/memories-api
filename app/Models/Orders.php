@@ -52,6 +52,6 @@ class Orders extends Model
 
     public function images()
     {
-        return $this->hasMany(OrdersImages::class);
+        return $this->hasMany(OrdersImages::class, 'order_id');
     }
 }

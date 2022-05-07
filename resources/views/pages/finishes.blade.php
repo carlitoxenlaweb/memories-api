@@ -49,7 +49,7 @@
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">{{ __('Crear Acabado') }}</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
                         <button type="submit" class="btn btn-success">{{ __('Crear Acabado') }}</button>
                     </div>
                 </form>
@@ -77,7 +77,7 @@
                     <input type="hidden" name="id" value="" id="update-form-id">
                     <div class="modal-header bg-info text-white">
                         <h4 class="modal-title">{{ __('Actualizar Acabado') }}</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
                         <button type="submit" class="btn btn-info text-white">{{ __('Actualizar Acabado') }}</button>
                     </div>
                 </form>
@@ -105,7 +105,7 @@
                     <input type="hidden" name="id" value="" id="delete-form-id">
                     <div class="modal-header bg-danger text-white">
                         <h4 class="modal-title">{{ __('Eliminar Acabado') }}</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -113,7 +113,7 @@
                         <h4>{{ __('¿Seguro que quieres eliminar el item seleccionado?') }}</h4>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Cancelar') }}</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ __('Cancelar') }}</button>
                         <button type="submit" class="btn btn-danger">{{ __('Eliminar Acabado') }}</button>
                     </div>
                 </form>
