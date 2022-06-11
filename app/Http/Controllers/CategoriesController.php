@@ -9,7 +9,9 @@ class CategoriesController extends Controller
 {
     public function view()
     {
-        return view("pages.categories", ["categories" => Category::all()]);
+        return view("pages.categories", [
+            "categories" => Category::with(['parent_category'])->get()
+        ]);
     }
 
     public function create(Request $request)
@@ -61,6 +63,17 @@ class CategoriesController extends Controller
     {
         $category = Category::find($request->input('id'));
         $category->delete();
+        $this->deleteRelated($category);
         return redirect()->route('categories.index');
+    }
+
+    private function deleteRelated (Category $category) {
+        $related = Category::where('parent_id', $category->id)->get();
+        for ($i=0; $i < count($related); $i++) { 
+            $related[$i]->delete();
+            if (!is_null($related[$i]->parent_id)) {
+                $this->deleteRelated($related[$i]);
+            }
+        }
     }
 }
