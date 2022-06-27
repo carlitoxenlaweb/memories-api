@@ -16,7 +16,7 @@
 
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered stripe">
                 <thead>
                     <tr>
                         <th>{{ __('Imágen') }}</th>
